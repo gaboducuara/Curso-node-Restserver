@@ -1,42 +1,77 @@
-const { response , request} = require('express');
+const bcryptjs = require('bcryptjs');
+const { response , request, query} = require('express');
+const User = require('../models/user');
 
-const userGet = (req = request, res = response) => {
 
-    const { page = 1, limit = 10, q, nombre = 'not name', apikey} = req.query;
+const userGet = async (req = request, res = response) => {
 
+    // const { page = 1, limit = 10, q , name = 'not name', apikey} = req.query;
+    const { limite = 20 , desde = 0 } = req.query;
+    const query = { status:true };
+    // const {id, name, apellido, comentario} = req.body
+  const [total , user] = await Promise.all([
+    User.countDocuments(query),
+    User.find(query)
+        .skip(Number( desde ))
+        .limit(Number(limite))
+  ])
 
     res.json({
-      msg: "get usuario - controlador",
-      q, nombre , apikey, page, limit
+      total , user
     });
   }
 
+  const userPost = async (req, res = response)  => {
 
-  const userPost = (req, res = response)  => {
+    const {name, email , password , rol} = req.body
+    const user = new User({name, email , password , rol});
 
-    const { TemasInteres } = req.body
+      // encriptar contraseña
+    const salt = bcryptjs.genSaltSync(12);
+    user.password = bcryptjs.hashSync( password , salt);
+
+    // guardar en base de datos
+    await user.save();
 
     res.status(201).json({
       msg: "Post usuario - controlador",
-      TemasInteres,
+      user
     });
   }
 
-  const userPut = (req, res = response) => {
+  // https://en.nuclea.solutions/interns-program/flutter-internship
+
+
+  const userPut = async (req, res = response) => {
     //forma 1 
     // const id = req.params.id
     //forma 2
     const {id} = req.params
+    const { _id, password , google, email , ...resto} = req.body;
 
-    res.status(500).json({
-      msg: "peticion Put a mi API",
-      id,
-    });
+    // validar informacion procedente de la base de datos
+    if ( password ) {
+      // encriptar contraseña
+        const salt = bcryptjs.genSaltSync(12);
+        resto.password = bcryptjs.hashSync( password , salt);
+    }
+
+    const userdb = await User.findByIdAndUpdate( id, resto );
+
+    res.status(200).json(userdb);
   }
 
-  const userDelete = (req, res = response) => {
+  const userDelete = async (req, res = response) => {
+
+    const { id } = req.params;
+
+    //Eliminar usuario Fisicamente
+    // const user = await User.findByIdAndDelete( id );
+
+    const user = await User.findByIdAndUpdate( id , {status: false});
+    
     res.json({
-      msg: "peticion delete a mi API",
+      user
     });
   }
 
