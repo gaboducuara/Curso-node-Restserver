@@ -71,7 +71,7 @@ const userGet = async (req = request, res = response) => {
     //Eliminar usuario Fisicamente
     // const user = await User.findByIdAndDelete( id );
 
-    const user = await User.findByIdAndUpdate( id , {status: false});
+    const user = await User.findByIdAndUpdate( id , {state: false});
     // el usuario autenticado se encuentra en la request
     // const usuarioAutenticado = req.user;
 
