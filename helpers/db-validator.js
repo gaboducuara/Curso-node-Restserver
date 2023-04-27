@@ -1,6 +1,6 @@
-const Role = require('../models/role');
-const user = require('../models/user')
 const mongoose = require('mongoose');
+const Role = require('../models');
+const { user ,  Category ,  Product} = require('../models');
 
 
 const esRolValido = async (rol = '') => {
@@ -19,6 +19,7 @@ const esRolValido = async (rol = '') => {
     }
   }
 
+  // -----> Validadores de usuario
   const UserById = async ( id ) => {
     // verificar si el Usuario existe
    if ( mongoose.Types.ObjectId.isValid (id)) {
@@ -33,8 +34,40 @@ const esRolValido = async (rol = '') => {
    }
  }
 
+ // -----> Validadores de categorias
+ const CategoryById = async ( id ) => {
+  // verificar si el Usuario existe
+ if ( mongoose.Types.ObjectId.isValid (id)) {
+   const existeId = await Category.findById ( id )
+
+   if ( !existeId ) {
+    throw new Error(`El Id ${ id } no existe en la base de datos `)
+ }   
+ } else {
+  throw new Error(`El Id ${ id } no es valido`)
+
+ }
+}
+
+// ---------> validadores de productos
+const productById = async ( id ) => {
+    // verificar si el Usuario existe
+ if ( mongoose.Types.ObjectId.isValid (id)) {
+  const existeId = await Product.findById ( id )
+
+  if ( !existeId ) {
+   throw new Error(`El Id ${ id } no existe en la base de datos `)
+}   
+} else {
+ throw new Error(`El Id ${ id } no es valido`)
+
+}
+}
+
   module.exports = {
     esRolValido,
     EmailExiste,
-    UserById
+    UserById,
+    CategoryById,
+    productById
   }

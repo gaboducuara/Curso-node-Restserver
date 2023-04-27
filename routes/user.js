@@ -29,8 +29,8 @@ router.post("/", [
   check('email' , 'El email no es valido' ).isEmail(),
   check('email').custom( EmailExiste ),
   check('password', 'La contraseña debe ser obligatoria y mas de 6 caracteres').not().isEmpty().isLength({ min:6 }),
-  //check('rol', 'El rol debe ser obligatorio').isIn(['ADMIN_ROLE', 'USER_ROLE']),
-  check('rol').custom(esRolValido ), 
+  check('rol', 'El rol debe ser obligatorio').isIn(['ADMIN_ROLE', 'USER_ROLE']),
+  // check('rol').custom(esRolValido ), 
   validarCampos ] , 
 userPost );
 

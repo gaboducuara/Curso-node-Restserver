@@ -88,7 +88,6 @@ const userGet = async (req = request, res = response) => {
     });
   }
 
-
   module.exports = {
     userGet,
     userPost,
