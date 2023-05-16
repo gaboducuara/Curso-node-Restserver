@@ -62,7 +62,8 @@ const CreatePostProduct = async (req = request, res = response) => {
     res.status(201).json(DataProduct);
   };
 
-const ProductPut = async (req = request, res = response) => {
+
+  const ProductPut = async (req = request, res = response) => {
     const {id} = req.params
     const { state, user, ...Productdata} = req.body;
 
