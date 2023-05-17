@@ -4,7 +4,7 @@ const { v4: uuidv4 } = require('uuid')
 
 
 const uploadArchive = ( files , extensionValidate = ["jpeg", "gif", "png", "jpg"], carpeta = '') => {
-    
+
   return new Promise((resolve, reject) => {
 
     const { archivo } = files;
@@ -23,7 +23,7 @@ const uploadArchive = ( files , extensionValidate = ["jpeg", "gif", "png", "jpg"
       if (err) {
             reject(err);
       }
-      resolve(uploadPath);
+      resolve(nombreTemp);
     });
   });
 };

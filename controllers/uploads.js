@@ -8,12 +8,15 @@ const cargarArchivo = async (req, res = response) => {
     return;
   };
 
-  // Se suben imagenes al path
-  const pathcomplete = await uploadArchive(req.files);
+  try {
+    // Se suben imagenes al path
+  const name = await uploadArchive(req.files , ['txt', 'md'] , 'textos');
+  res.json({name})
+  } catch (msg) {
+    res.status(400).json({msg})
+  }
 
-  res.json({
-    path: pathcomplete
-  })
+  
 };
 
   
