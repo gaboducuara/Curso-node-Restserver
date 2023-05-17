@@ -10,7 +10,7 @@ const cargarArchivo = async (req, res = response) => {
 
   try {
     // Se suben imagenes al path
-  const name = await uploadArchive(req.files , ['txt', 'md'] , 'textos');
+  const name = await uploadArchive(req.files , undefined , 'imgs');
   res.json({name})
   } catch (msg) {
     res.status(400).json({msg})
