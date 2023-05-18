@@ -1,13 +1,10 @@
+const path = require('path');
+const fs = require('fs');
 const { response } = require("express");
 const { uploadArchive } = require("../helpers");
 const { user, Product} = require('../models')
 
 const cargarArchivo = async (req, res = response) => {
-  
-  if (!req.files || Object.keys(req.files).length === 0 || !req.files.archivo) {
-    res.status(400).json({msg:'No hay archivos que subir'});
-    return;
-  };
 
   try {
     // Se suben imagenes al path
@@ -19,7 +16,6 @@ const cargarArchivo = async (req, res = response) => {
 };
 
 // ----------------------> Actualizar las imagenes de product y user
-
 const updateImage = async (req , res = response) => {
   
   const { id , coleccion } = req.params;
@@ -48,6 +44,22 @@ const updateImage = async (req , res = response) => {
     default:
       return res.status(500).json({msg: 'Se me olvido validar esto'});
   }
+
+  // Limpiar imagenes previas
+  if (modelo.img) {
+    const pathImagen = path.join( __dirname, '../uploads', coleccion, modelo.img);
+    if (fs.existsSync( pathImagen )) {
+      fs.unlinkSync ( pathImagen );
+    }
+  }
+
+
+
+
+
+
+
+
 
   // Aqui se guardan las imagenes en carpetas prediseñadas
   const name = await uploadArchive(req.files , undefined , coleccion);
