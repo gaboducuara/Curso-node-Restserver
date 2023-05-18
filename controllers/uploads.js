@@ -1,5 +1,6 @@
 const { response } = require("express");
 const { uploadArchive } = require("../helpers");
+const { user, Product} = require('../models')
 
 const cargarArchivo = async (req, res = response) => {
   
@@ -19,14 +20,38 @@ const cargarArchivo = async (req, res = response) => {
 
 const updateImage = async (req , res = response) => {
   
-  const { id , coleccion } = req.params
+  const { id , coleccion } = req.params;
+
+  let modelo 
+
+  switch (coleccion) {
+    case 'user':
+        modelo = await user.findById(id);
+        if (!modelo) {
+          return res.status(400).json({
+            msg: `No existe un usuario con el id ${id}`
+          });
+        }
+    break;
+
+    case 'Product':
+      modelo = await Product.findById(id);
+      if (!modelo) {
+        return res.status(400).json({
+          msg: `No existe un producto con el id ${id}`
+        });
+      }
+
+    break;
+
+    default:
+      return res.status(500).json({msg: 'Se me olvido validar esto'});
+  }
 
   res.json({
     id , coleccion
   });
 }
-
-  
 
 module.exports = {
   cargarArchivo,
