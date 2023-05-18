@@ -53,14 +53,6 @@ const updateImage = async (req , res = response) => {
     }
   }
 
-
-
-
-
-
-
-
-
   // Aqui se guardan las imagenes en carpetas prediseñadas
   const name = await uploadArchive(req.files , undefined , coleccion);
   modelo.img = name;
@@ -70,7 +62,59 @@ const updateImage = async (req , res = response) => {
   res.json(modelo)
 }
 
+
+
+/// ----------------> Mostrando las imagenes -> GET - Img
+
+const mostrarImg = async (req , res = response ) => {
+
+  const { id , coleccion } = req.params;
+
+  let modelo 
+
+  switch (coleccion) {
+    case 'user':
+        modelo = await user.findById(id);
+        if (!modelo) {
+          return res.status(400).json({
+            msg: `No existe un usuario con el id ${id}`
+          });
+        }
+    break;
+
+    case 'product':
+        modelo = await Product.findById(id);
+        if ( !modelo) {
+          return res.status(400).json({
+            msg: `No existe un producto con el id ${id}`
+          });
+        }
+    break;
+
+    default:
+      return res.status(500).json({msg: 'Se me olvido validar esto'});
+  }
+
+  // Limpiar imagenes previas
+  if (modelo.img) {
+    const pathImagen = path.join( __dirname, '../uploads', coleccion, modelo.img);
+    if (fs.existsSync( pathImagen )) {
+      return res.sendFile (pathImagen)
+    }
+
+  }
+    const pathImagen = path.join( __dirname, '../assets/no-image.jpg');
+    res.sendFile( pathImagen );
+  // // Aqui se guardan las imagenes en carpetas prediseñadas
+  // const name = await uploadArchive(req.files , undefined , coleccion);
+  // modelo.img = name;
+  // await modelo.save();
+  // res.json(modelo)
+
+}
+
 module.exports = {
   cargarArchivo,
-  updateImage
+  updateImage,
+  mostrarImg
 };
