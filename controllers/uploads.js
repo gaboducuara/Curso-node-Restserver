@@ -18,6 +18,8 @@ const cargarArchivo = async (req, res = response) => {
   }
 };
 
+// ----------------------> Actualizar las imagenes de product y user
+
 const updateImage = async (req , res = response) => {
   
   const { id , coleccion } = req.params;
@@ -46,6 +48,8 @@ const updateImage = async (req , res = response) => {
     default:
       return res.status(500).json({msg: 'Se me olvido validar esto'});
   }
+
+  // Aqui se guardan las imagenes en carpetas prediseñadas
   const name = await uploadArchive(req.files , undefined , coleccion);
   modelo.img = name;
   

@@ -8,7 +8,8 @@ const uploadArchive = ( files , extensionValidate = ["jpeg", "gif", "png", "jpg"
   return new Promise((resolve, reject) => {
 
     const { archivo } = files;
-    const nombreCortado = archivo.name.split(".");
+    const nombreCortado = archivo.name.split('.');
+    // console.log(nombreCortado)
     const extension = nombreCortado[nombreCortado.length - 1];
 
     // Aqui validamos los terminos o datos que queremos
