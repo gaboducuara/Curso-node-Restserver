@@ -52,7 +52,6 @@ class Server {
     this.app.use(this.paths.categorias, require('../routes/categories.js'))
     this.app.use(this.paths.productos, require('../routes/product.js'))
     this.app.use(this.paths.uploads, require('../routes/uploads.js'));
-
   };
   listen() {
     this.app.listen(this.port, () => {

@@ -34,23 +34,24 @@ const updateImage = async (req , res = response) => {
         }
     break;
 
-    case 'Product':
-      modelo = await Product.findById(id);
-      if (!modelo) {
-        return res.status(400).json({
-          msg: `No existe un producto con el id ${id}`
-        });
-      }
-
+    case 'product':
+        modelo = await Product.findById(id);
+        if ( !modelo) {
+          return res.status(400).json({
+            msg: `No existe un producto con el id ${id}`
+          });
+        }
     break;
 
     default:
       return res.status(500).json({msg: 'Se me olvido validar esto'});
   }
-
-  res.json({
-    id , coleccion
-  });
+  const name = await uploadArchive(req.files , undefined , coleccion);
+  modelo.img = name;
+  
+  await modelo.save();
+  
+  res.json(modelo)
 }
 
 module.exports = {
